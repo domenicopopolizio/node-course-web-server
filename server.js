@@ -9,7 +9,7 @@ hbs.registerPartials(__dirname+'/views/partials');
 app.set('view engine','hbs');
 
 
-app.use( (req, res, next) => res.render('maintenance.hbs') );
+//app.use( (req, res, next) => res.render('maintenance.hbs') );
 
 app.use(express.static(__dirname+'/public'));
 
@@ -18,7 +18,7 @@ app.use(
         let now = new Date().toString();
         let log = `${now}: ${req.method} ${req.url}`;
         fs.appendFile('server.log', log+'\n', 
-            err => console.log('Can\'t Save file, because following error occurred: \n', err)
+            err => { if (err) console.log('Can\'t Save file, because following error occurred: \n', err) }
         );
         next();
     }
@@ -61,6 +61,19 @@ app.get(
             {
                 pageTitle: 'About Page',
                 currentYear: new Date().getFullYear()
+            }
+        );
+    }
+)
+
+app.get(
+    '/project',
+    (req, res) => {
+        res.render(
+            'project.hbs',
+            {
+                pageTitle:'Project Page', 
+                message: 'Here you can find my project! '
             }
         );
     }
